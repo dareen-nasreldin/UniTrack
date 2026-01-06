@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - UniTrack{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2 class="page-title">📚 Dashboard</h2>
+
+    {% if inbox_items %}
+    <div class="inbox-alert">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+            <strong>You have {{ inbox_items|length }} item(s) in your Inbox!</strong>
+            <a href="{{ url_for('process_inbox') }}" class="btn btn-primary btn-small">Process Now</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not tasks_by_course and not unassigned_tasks and not inbox_items %}
+    <div class="empty-state">
+        <p class="empty-text">No tasks found. Add a task to get started! 🎯</p>
+        <a href="{{ url_for('add_quick_note') }}" class="btn btn-primary">Add Quick Note</a>
+    </div>
+    {% else %}
+    
+    <div class="tasks-section">
+        {% if unassigned_tasks %}
+        <div class="course-group">
+            <h3 class="course-header">Unassigned</h3>
+            <div class="tasks-grid">
+                {% for task in unassigned_tasks %}
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-title">{{ task.title }}</div>
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}" class="edit-btn" title="Edit task">✏️</a>
+                    </div>
+                    {% if task.description %}
+                    <div class="task-description">{{ task.description }}</div>
+                    {% endif %}
+                    <div class="task-meta">
+                        <span class="task-due-date">
+                            {% if task.due_date %}
+                                📅 {{ task.due_date }}
+                            {% else %}
+                                <span class="no-date">No date</span>
+                            {% endif %}
+                        </span>
+                        <span class="task-id">ID: {{ task.id }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% for course_name, course_tasks in tasks_by_course.items() %}
+        <div class="course-group">
+            <h3 class="course-header">{{ course_name }}</h3>
+            <div class="tasks-grid">
+                {% for task in course_tasks %}
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-title">{{ task.title }}</div>
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}" class="edit-btn" title="Edit task">✏️</a>
+                    </div>
+                    {% if task.description %}
+                    <div class="task-description">{{ task.description }}</div>
+                    {% endif %}
+                    <div class="task-meta">
+                        <span class="task-due-date">
+                            {% if task.due_date %}
+                                📅 {{ task.due_date }}
+                            {% else %}
+                                <span class="no-date">No date</span>
+                            {% endif %}
+                        </span>
+                        <span class="task-id">ID: {{ task.id }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

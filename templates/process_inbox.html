@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Process Inbox - UniTrack{% endblock %}
+
+{% block content %}
+<div class="process-inbox-container">
+    <h2 class="page-title">📥 Process Inbox</h2>
+    <p class="form-description">Assign courses and due dates to your Inbox items.</p>
+
+    {% if inbox_items %}
+    <div class="inbox-items">
+        {% for item in inbox_items %}
+        <div class="inbox-item-card">
+            <div class="inbox-item-header">
+                <div>
+                    <h3 class="inbox-item-title">{{ item.title }}</h3>
+                    <span class="inbox-item-date">Created: {{ item.created_at }}</span>
+                </div>
+                <a href="{{ url_for('edit_task', task_id=item.id) }}" class="edit-btn" title="Edit task">✏️</a>
+            </div>
+            
+            <form method="POST" action="{{ url_for('process_task', task_id=item.id) }}" class="process-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="course_id_{{ item.id }}" class="form-label">Course</label>
+                        <select id="course_id_{{ item.id }}" 
+                                name="course_id" 
+                                class="form-select"
+                                onchange="toggleNewCourseInput({{ item.id }})">
+                            <option value="">-- Select or Create Course --</option>
+                            {% for course in courses %}
+                            <option value="{{ course.id }}">{{ course.name }}</option>
+                            {% endfor %}
+                            <option value="new">➕ Create New Course</option>
+                        </select>
+                    </div>
+                    
+                    <div id="new_course_{{ item.id }}" class="form-group" style="display: none;">
+                        <label for="new_course_name_{{ item.id }}" class="form-label">New Course Name</label>
+                        <input type="text" 
+                               id="new_course_name_{{ item.id }}" 
+                               name="new_course_name" 
+                               class="form-input" 
+                               placeholder="Enter course name...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="due_date_{{ item.id }}" class="form-label">Due Date</label>
+                        <input type="date" 
+                               id="due_date_{{ item.id }}" 
+                               name="due_date" 
+                               class="form-input">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description_{{ item.id }}" class="form-label">Description</label>
+                    <textarea id="description_{{ item.id }}" 
+                              name="description" 
+                              class="form-textarea" 
+                              rows="4"
+                              placeholder="Add details like which lectures this is for, specific requirements, notes...">{{ item.description or '' }}</textarea>
+                    <small class="form-hint">e.g., "Lectures 5-7", "Chapters 3-4", "Project requirements"</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Process Task</button>
+                </div>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p class="empty-text">No items in Inbox to process. 🎉</p>
+        <a href="{{ url_for('add_quick_note') }}" class="btn btn-primary">Add Quick Note</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleNewCourseInput(itemId) {
+    const select = document.getElementById('course_id_' + itemId);
+    const newCourseDiv = document.getElementById('new_course_' + itemId);
+    if (select.value === 'new') {
+        newCourseDiv.style.display = 'block';
+    } else {
+        newCourseDiv.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}
