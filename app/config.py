@@ -16,6 +16,8 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    # /tmp is the only writable path on serverless platforms (Vercel)
+    DATABASE_PATH = os.environ.get('DATABASE_PATH', '/tmp/unitrack.db')
 
 
 config_map = {
