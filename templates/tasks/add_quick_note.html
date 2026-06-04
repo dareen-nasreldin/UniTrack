@@ -4,15 +4,51 @@
 {% block content %}
 <div class="form-container">
     <h2 class="page-title">
-        <!-- Lightning bolt — quick capture -->
         <svg class="page-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M11 2L4 11h7l-2 7 9-10h-7l2-6z"/>
         </svg>
         Quick Note
     </h2>
-    <p class="form-description">Dump a task into your Inbox — no details needed right now.</p>
+    <p class="form-description">Dump a task into your Inbox. No details needed right now.</p>
 
-    <form method="POST" action="{{ url_for('add_quick_note') }}" class="form">
+    <form method="POST" action="{{ url_for('add_quick_note') }}" class="form" id="quick-form">
+
+        <!-- Task type toggle -->
+        <div class="form-group">
+            <label class="form-label">Type</label>
+            <div class="task-type-toggle" role="group" aria-label="Task type">
+                <button type="button" class="task-type-btn active" id="btn-task"
+                        onclick="setMode('task')">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3 3 6-6"/></svg>
+                    Task
+                </button>
+                <button type="button" class="task-type-btn" id="btn-internship"
+                        onclick="setMode('internship')">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="3.5" width="10" height="8" rx="1"/><path d="M4.5 3.5V2.5h4v1"/></svg>
+                    Internship Application
+                </button>
+            </div>
+        </div>
+
+        <!-- Internship URL section (hidden by default) -->
+        <div class="internship-section" id="internship-section" aria-live="polite">
+            <div class="form-group" style="margin:0">
+                <label for="job_url" class="form-label">Job posting URL</label>
+                <div class="parse-row">
+                    <input type="url" id="job_url" class="form-input"
+                           placeholder="https://linkedin.com/jobs/... or any job posting link"
+                           autocomplete="url">
+                    <button type="button" class="btn btn-primary btn-small" id="parse-btn"
+                            onclick="parseLink()">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="5.5" r="3.5"/><path d="M8.5 8.5l3 3"/></svg>
+                        Parse link
+                    </button>
+                </div>
+                <span class="parse-status" id="parse-status" aria-live="polite"></span>
+            </div>
+        </div>
+
+        <!-- Title — pre-filled by parser when in internship mode -->
         <div class="form-group">
             <label for="title" class="form-label">Task title</label>
             <input type="text"
@@ -23,10 +59,78 @@
                    required
                    autofocus>
         </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Add to Inbox</button>
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>
+
+<script>
+function setMode(mode) {
+    var section = document.getElementById('internship-section');
+    var btnTask = document.getElementById('btn-task');
+    var btnInt  = document.getElementById('btn-internship');
+    var title   = document.getElementById('title');
+
+    if (mode === 'internship') {
+        section.classList.add('open');
+        btnInt.classList.add('active');
+        btnTask.classList.remove('active');
+        title.placeholder = 'Filled automatically when you parse the link, or type manually';
+    } else {
+        section.classList.remove('open');
+        btnTask.classList.add('active');
+        btnInt.classList.remove('active');
+        document.getElementById('job_url').value = '';
+        document.getElementById('parse-status').textContent = '';
+        document.getElementById('parse-status').className = 'parse-status';
+        title.placeholder = 'e.g. Study for midterm, Submit internship app...';
+    }
+}
+
+async function parseLink() {
+    var url    = document.getElementById('job_url').value.trim();
+    var status = document.getElementById('parse-status');
+    var btn    = document.getElementById('parse-btn');
+    var title  = document.getElementById('title');
+
+    if (!url) {
+        status.textContent = 'Paste a job posting URL first.';
+        status.className = 'parse-status error';
+        return;
+    }
+
+    status.textContent = 'Fetching link...';
+    status.className = 'parse-status loading';
+    btn.disabled = true;
+
+    try {
+        var res  = await fetch('/parse-job-link', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: url })
+        });
+        var data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+
+        if (data.suggested_title) {
+            title.value = data.suggested_title;
+        }
+
+        status.textContent = data.suggested_title
+            ? 'Title filled. Edit it if needed.'
+            : 'Parsed but no title found. Fill in manually.';
+        status.className = 'parse-status success';
+        title.focus();
+    } catch (err) {
+        status.textContent = 'Could not parse the link — fill in the title manually.';
+        status.className = 'parse-status error';
+    } finally {
+        btn.disabled = false;
+    }
+}
+</script>
 {% endblock %}

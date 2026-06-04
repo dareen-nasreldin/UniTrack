@@ -1,6 +1,7 @@
-import sqlite3
+import re
 import calendar
-from flask import render_template, request, redirect, url_for, flash
+import requests as http
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required, current_user
 from datetime import datetime, date
 
@@ -223,3 +224,49 @@ def register_routes(app, db):
         db.delete_task(task_id, current_user.id)
         flash('Task deleted.', 'success')
         return redirect(url_for('dashboard'))
+
+    @app.route('/parse-job-link', methods=['POST'])
+    @login_required
+    def parse_job_link():
+        data = request.get_json(silent=True) or {}
+        url  = data.get('url', '').strip()
+        if not url:
+            return jsonify({'error': 'No URL provided'}), 400
+        if not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+
+        try:
+            from bs4 import BeautifulSoup
+            resp = http.get(url, timeout=8, headers={
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            })
+            resp.raise_for_status()
+            soup = BeautifulSoup(resp.text, 'html.parser')
+
+            # Page title — strip trailing site name ( | LinkedIn, - Indeed, etc.)
+            raw_title = soup.title.string.strip() if soup.title else ''
+            clean_title = re.sub(
+                r'\s*[\|–\-]\s*(LinkedIn|Glassdoor|Indeed|Greenhouse|Lever|Workday|'
+                r'Workable|AngelList|Wellfound|ZipRecruiter|Monster|CareerBuilder|Jobs)\b.*$',
+                '', raw_title, flags=re.IGNORECASE
+            ).strip()
+
+            # First <h1> often has the job title
+            h1 = soup.find('h1')
+            h1_text = h1.get_text(strip=True) if h1 else ''
+
+            # Meta description / og:description
+            meta = (soup.find('meta', attrs={'name': 'description'}) or
+                    soup.find('meta', attrs={'property': 'og:description'}))
+            description = meta.get('content', '').strip()[:400] if meta else ''
+
+            # Pick the best title: prefer h1 if concise, else cleaned page title
+            best = h1_text if (h1_text and len(h1_text) < 80) else clean_title
+            suggested_title = f"Apply — {best}" if best else ''
+
+            return jsonify({
+                'suggested_title': suggested_title,
+                'description':     description,
+            })
+        except Exception as exc:
+            return jsonify({'error': str(exc)}), 422
