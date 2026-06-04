@@ -1,41 +1,63 @@
 {% extends "base.html" %}
-
 {% block title %}Calendar - UniTrack{% endblock %}
 
 {% block content %}
 <div class="calendar-container">
     <div class="calendar-header">
-        <h2 class="page-title">📅 Calendar View</h2>
+        <h2 class="page-title" style="margin-bottom:0">
+            <!-- Calendar icon -->
+            <svg class="page-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+                <rect x="2" y="3" width="16" height="15" rx="2"/>
+                <path d="M2 8h16M6 1v3M14 1v3"/>
+            </svg>
+            Calendar
+        </h2>
         <div class="calendar-navigation">
-            <a href="{{ url_for('calendar_view', year=prev_year, month=prev_month) }}" class="btn btn-secondary btn-small">← Previous</a>
-            <span class="calendar-month-year">{{ month_name }} {{ year }}</span>
-            <a href="{{ url_for('calendar_view', year=next_year, month=next_month) }}" class="btn btn-secondary btn-small">Next →</a>
+            <a href="{{ url_for('calendar_view', year=prev_year, month=prev_month) }}"
+               class="btn btn-secondary btn-small" aria-label="Previous month">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2L4 7l5 5"/></svg>
+                Previous
+            </a>
+            <span class="calendar-month-year" aria-live="polite">{{ month_name }} {{ year }}</span>
+            <a href="{{ url_for('calendar_view', year=next_year, month=next_month) }}"
+               class="btn btn-secondary btn-small" aria-label="Next month">
+                Next
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 2l5 5-5 5"/></svg>
+            </a>
             <a href="{{ url_for('calendar_view') }}" class="btn btn-primary btn-small">Today</a>
         </div>
     </div>
 
-    <div class="calendar-grid">
-        <div class="calendar-weekdays">
-            <div class="calendar-weekday">Mon</div>
-            <div class="calendar-weekday">Tue</div>
-            <div class="calendar-weekday">Wed</div>
-            <div class="calendar-weekday">Thu</div>
-            <div class="calendar-weekday">Fri</div>
-            <div class="calendar-weekday">Sat</div>
-            <div class="calendar-weekday">Sun</div>
-        </div>
+    <div class="calendar-scroll-wrapper" role="region" aria-label="Monthly calendar grid">
+        <div class="calendar-grid">
+            <div class="calendar-weekdays" aria-hidden="true">
+                <div class="calendar-weekday">Mon</div>
+                <div class="calendar-weekday">Tue</div>
+                <div class="calendar-weekday">Wed</div>
+                <div class="calendar-weekday">Thu</div>
+                <div class="calendar-weekday">Fri</div>
+                <div class="calendar-weekday">Sat</div>
+                <div class="calendar-weekday">Sun</div>
+            </div>
 
-        {% for week in calendar %}
-        <div class="calendar-week">
-            {% for day in week %}
-            <div class="calendar-day {% if day == 0 %}calendar-day-empty{% endif %} {% if year == today.year and month == today.month and day == today.day %}calendar-day-today{% endif %}">
-                {% if day != 0 %}
-                <div class="calendar-day-number">{{ day }}</div>
-                <div class="calendar-day-tasks">
-                    {% if day in tasks_by_day %}
-                        {% for task in tasks_by_day[day] %}
-                        <div class="calendar-task-item {% if task.status == 'Pending' %}task-pending{% elif task.status == 'Inbox' %}task-inbox{% endif %}">
-                            <a href="{{ url_for('edit_task', task_id=task.id) }}" class="calendar-task-link" title="{{ task.title }}">
+            {% for week in calendar %}
+            <div class="calendar-week">
+                {% for day in week %}
+                <div class="calendar-day
+                    {% if day == 0 %}calendar-day-empty{% endif %}
+                    {% if year == today.year and month == today.month and day == today.day %}calendar-day-today{% endif %}">
+                    {% if day != 0 %}
+                    <div class="calendar-day-number">{{ day }}</div>
+                    <div class="calendar-day-tasks">
+                        {% for task in tasks_by_day.get(day, []) %}
+                        <div class="calendar-task-item
+                            {% if task.status == 'Pending' %}task-pending
+                            {% elif task.status == 'Inbox' %}task-inbox
+                            {% elif task.status == 'Done' %}task-done
+                            {% endif %}">
+                            <a href="{{ url_for('edit_task', task_id=task.id) }}"
+                               class="calendar-task-link"
+                               title="{{ task.title }}{% if task.course_name %} — {{ task.course_name }}{% endif %}">
                                 <span class="calendar-task-title">{{ task.title }}</span>
                                 {% if task.course_name %}
                                 <span class="calendar-task-course">{{ task.course_name }}</span>
@@ -43,28 +65,20 @@
                             </a>
                         </div>
                         {% endfor %}
+                    </div>
                     {% endif %}
                 </div>
-                {% endif %}
+                {% endfor %}
             </div>
             {% endfor %}
         </div>
-        {% endfor %}
     </div>
 
-    <div class="calendar-legend">
-        <div class="legend-item">
-            <span class="legend-color task-pending"></span>
-            <span>Pending Tasks</span>
-        </div>
-        <div class="legend-item">
-            <span class="legend-color task-inbox"></span>
-            <span>Inbox Tasks</span>
-        </div>
-        <div class="legend-item">
-            <span class="legend-color calendar-day-today"></span>
-            <span>Today</span>
-        </div>
+    <div class="calendar-legend" aria-label="Calendar legend">
+        <div class="legend-item"><span class="legend-color task-pending" aria-hidden="true"></span>Pending</div>
+        <div class="legend-item"><span class="legend-color task-inbox"   aria-hidden="true"></span>Inbox</div>
+        <div class="legend-item"><span class="legend-color task-done"    aria-hidden="true"></span>Done</div>
+        <div class="legend-item"><span class="legend-color calendar-day-today" aria-hidden="true"></span>Today</div>
     </div>
 </div>
 {% endblock %}

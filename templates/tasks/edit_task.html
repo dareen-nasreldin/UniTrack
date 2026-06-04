@@ -1,67 +1,54 @@
 {% extends "base.html" %}
-
 {% block title %}Edit Task - UniTrack{% endblock %}
 
 {% block content %}
 <div class="form-container">
-    <h2 class="page-title">✏️ Edit Task</h2>
-    <p class="form-description">Update task details, fix typos, or change course assignments.</p>
+    <h2 class="page-title">
+        <!-- Pencil icon -->
+        <svg class="page-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2.5l3.5 3.5L6 17.5H2.5V14L14 2.5z"/>
+            <path d="M13 3.5l3.5 3.5"/>
+        </svg>
+        Edit Task
+    </h2>
+    <p class="form-description">Update details, change course, or fix the due date.</p>
 
     <form method="POST" action="{{ url_for('edit_task', task_id=task.id) }}" class="form">
         <div class="form-group">
-            <label for="title" class="form-label">Task Title</label>
-            <input type="text"
-                   id="title"
-                   name="title"
-                   class="form-input"
-                   value="{{ task.title }}"
-                   placeholder="Enter task title..."
-                   required
-                   autofocus>
+            <label for="title" class="form-label">Task title</label>
+            <input type="text" id="title" name="title" class="form-input"
+                   value="{{ task.title }}" required autofocus>
         </div>
 
         <div class="form-group">
             <label for="course_id" class="form-label">Course</label>
-            <select id="course_id"
-                    name="course_id"
-                    class="form-select"
+            <select id="course_id" name="course_id" class="form-select"
                     onchange="toggleNewCourseInput()">
-                <option value="none" {% if not task.course_id %}selected{% endif %}>-- No Course (Unassigned) --</option>
+                <option value="none" {% if not task.course_id %}selected{% endif %}>No course (unassigned)</option>
                 {% for course in courses %}
-                <option value="{{ course.id }}" {% if task.course_id == course.id %}selected{% endif %}>
-                    {{ course.name }}
-                </option>
+                <option value="{{ course.id }}" {% if task.course_id == course.id %}selected{% endif %}>{{ course.name }}</option>
                 {% endfor %}
-                <option value="new">➕ Create New Course</option>
+                <option value="new">+ Create new course</option>
             </select>
         </div>
 
-        <div id="new_course_div" class="form-group" style="display: none;">
-            <label for="new_course_name" class="form-label">New Course Name</label>
-            <input type="text"
-                   id="new_course_name"
-                   name="new_course_name"
-                   class="form-input"
-                   placeholder="Enter course name...">
+        <div id="new_course_div" class="form-group" style="display:none">
+            <label for="new_course_name" class="form-label">New course name</label>
+            <input type="text" id="new_course_name" name="new_course_name"
+                   class="form-input" placeholder="e.g. ECE241">
         </div>
 
         <div class="form-group">
-            <label for="due_date" class="form-label">Due Date</label>
-            <input type="date"
-                   id="due_date"
-                   name="due_date"
-                   class="form-input"
+            <label for="due_date" class="form-label">Due date</label>
+            <input type="date" id="due_date" name="due_date" class="form-input"
                    value="{{ task.due_date or '' }}">
         </div>
 
         <div class="form-group">
-            <label for="description" class="form-label">Description</label>
-            <textarea id="description"
-                      name="description"
-                      class="form-textarea"
-                      rows="4"
-                      placeholder="Add details like which lectures this is for, specific requirements, notes...">{{ task.description or '' }}</textarea>
-            <small class="form-hint">e.g., "Lectures 5-7", "Chapters 3-4", "Project requirements"</small>
+            <label for="description" class="form-label">Description <span style="color:var(--text-faint);font-weight:400">(optional)</span></label>
+            <textarea id="description" name="description" class="form-textarea" rows="3"
+                      placeholder="e.g. Lectures 5-7, Chapters 3-4, project requirements">{{ task.description or '' }}</textarea>
+            <small class="form-hint">e.g. "Lectures 5-7", "Chapters 3-4", "Project requirements"</small>
         </div>
 
         <div class="form-info">
@@ -74,13 +61,33 @@
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
+
+    <div class="task-secondary-actions">
+        {% if task.status != 'Done' %}
+        <form method="POST" action="{{ url_for('complete_task', task_id=task.id) }}">
+            <button type="submit" class="btn btn-success">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7.5l3.5 3.5 6.5-7"/></svg>
+                Mark as Done
+            </button>
+        </form>
+        {% else %}
+        <p class="form-hint" style="color:var(--success);font-style:normal">This task is already marked as done.</p>
+        {% endif %}
+        <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}"
+              onsubmit="return confirm('Delete this task? This cannot be undone.')">
+            <button type="submit" class="btn btn-danger">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M1.5 3.5h11"/><path d="M4.5 3.5V2.5h5v1"/><path d="M3 3.5l.5 8.5h7l.5-8.5"/></svg>
+                Delete Task
+            </button>
+        </form>
+    </div>
 </div>
 
 <script>
 function toggleNewCourseInput() {
-    const select = document.getElementById('course_id');
-    const newCourseDiv = document.getElementById('new_course_div');
-    newCourseDiv.style.display = select.value === 'new' ? 'block' : 'none';
+    var sel = document.getElementById('course_id');
+    var div = document.getElementById('new_course_div');
+    div.style.display = sel.value === 'new' ? 'block' : 'none';
 }
 </script>
 {% endblock %}

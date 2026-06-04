@@ -3,6 +3,9 @@ import threading
 from datetime import datetime
 from typing import List, Optional, Dict
 
+# Sentinel for update_task — distinguishes "don't change" from "set to NULL"
+_UNSET = object()
+
 
 class Database:
     """SQLite database layer for UniTrack."""
@@ -158,30 +161,32 @@ class Database:
     def update_task(
         self,
         task_id: int,
-        title: Optional[str] = None,
-        course_id: Optional[int] = None,
-        due_date: Optional[str] = None,
-        status: Optional[str] = None,
-        description: Optional[str] = None,
+        title=_UNSET,
+        course_id=_UNSET,
+        due_date=_UNSET,
+        status=_UNSET,
+        description=_UNSET,
     ) -> None:
+        """Update task fields. Pass _UNSET (the default) to leave a field unchanged.
+        Passing None explicitly sets the field to NULL in the database."""
         conn = self.get_connection()
         cursor = conn.cursor()
 
         updates, params = [], []
 
-        if title is not None:
+        if title is not _UNSET:
             updates.append("title = ?")
             params.append(title)
-        if course_id is not None:
+        if course_id is not _UNSET:
             updates.append("course_id = ?")
             params.append(course_id)
-        if due_date is not None:
+        if due_date is not _UNSET:
             updates.append("due_date = ?")
             params.append(due_date)
-        if status is not None:
+        if status is not _UNSET:
             updates.append("status = ?")
             params.append(status)
-        if description is not None:
+        if description is not _UNSET:
             updates.append("description = ?")
             params.append(description)
 
@@ -190,6 +195,12 @@ class Database:
 
         params.append(task_id)
         cursor.execute(f"UPDATE tasks SET {', '.join(updates)} WHERE id = ?", params)
+        conn.commit()
+
+    def delete_task(self, task_id: int) -> None:
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
         conn.commit()
 
     def close(self) -> None:

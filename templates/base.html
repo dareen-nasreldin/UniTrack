@@ -7,25 +7,51 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <h1 class="logo">📚 UniTrack</h1>
-            <ul class="nav-menu">
-                <li><a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a></li>
-                <li><a href="{{ url_for('calendar_view') }}" class="nav-link">Calendar</a></li>
-                <li><a href="{{ url_for('add_quick_note') }}" class="nav-link">Quick Note</a></li>
-                <li><a href="{{ url_for('process_inbox') }}" class="nav-link">Process Inbox</a></li>
-                <li><a href="{{ url_for('add_course') }}" class="nav-link">Add Course</a></li>
-            </ul>
-        </div>
-    </nav>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <main class="main-content">
+    <header>
+        <nav class="navbar" aria-label="Main navigation">
+            <div class="nav-container">
+                <!-- Logo: trending-line chart SVG representing "tracking progress" -->
+                <a href="{{ url_for('dashboard') }}" class="logo" aria-label="UniTrack home">
+                    <svg class="logo-mark" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect width="24" height="24" rx="5" fill="rgba(255,255,255,0.12)"/>
+                        <polyline points="4,17 9,11 13,14 19,7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="4"  cy="17" r="1.5" fill="white"/>
+                        <circle cx="9"  cy="11" r="1.5" fill="white"/>
+                        <circle cx="13" cy="14" r="1.5" fill="white"/>
+                        <circle cx="19" cy="7"  r="1.5" fill="white"/>
+                    </svg>
+                    UniTrack
+                </a>
+
+                <button class="nav-hamburger"
+                        id="navToggle"
+                        aria-label="Toggle navigation menu"
+                        aria-expanded="false"
+                        aria-controls="navMenu">
+                    <span class="hamburger-line" aria-hidden="true"></span>
+                    <span class="hamburger-line" aria-hidden="true"></span>
+                    <span class="hamburger-line" aria-hidden="true"></span>
+                </button>
+
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="{{ url_for('dashboard') }}"    class="nav-link">Dashboard</a></li>
+                    <li><a href="{{ url_for('calendar_view') }}" class="nav-link">Calendar</a></li>
+                    <li><a href="{{ url_for('add_quick_note') }}" class="nav-link">Quick Note</a></li>
+                    <li><a href="{{ url_for('process_inbox') }}" class="nav-link">Process Inbox</a></li>
+                    <li><a href="{{ url_for('add_course') }}"   class="nav-link">Add Course</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content" id="main-content">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="flash-messages">
+                <div class="flash-messages" aria-live="polite">
                     {% for category, message in messages %}
-                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                        <div class="flash flash-{{ category }}" role="alert">{{ message }}</div>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -34,7 +60,24 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
-    </footer>
+    <footer class="footer"></footer>
+
+    <script>
+    (function () {
+        var toggle = document.getElementById('navToggle');
+        var menu   = document.getElementById('navMenu');
+        if (!toggle || !menu) return;
+        toggle.addEventListener('click', function () {
+            var open = menu.classList.toggle('nav-open');
+            toggle.setAttribute('aria-expanded', String(open));
+        });
+        menu.querySelectorAll('.nav-link').forEach(function (link) {
+            link.addEventListener('click', function () {
+                menu.classList.remove('nav-open');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    })();
+    </script>
 </body>
 </html>

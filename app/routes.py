@@ -169,6 +169,26 @@ def register_routes(app, db):
 
         return render_template('courses/add_course.html')
 
+    @app.route('/complete-task/<int:task_id>', methods=['POST'])
+    def complete_task(task_id):
+        task = db.get_task_by_id(task_id)
+        if not task:
+            flash('Task not found!', 'error')
+            return redirect(url_for('dashboard'))
+        db.update_task(task_id=task_id, status='Done')
+        flash(f'"{task["title"]}" marked as done!', 'success')
+        return redirect(url_for('dashboard'))
+
+    @app.route('/delete-task/<int:task_id>', methods=['POST'])
+    def delete_task(task_id):
+        task = db.get_task_by_id(task_id)
+        if not task:
+            flash('Task not found!', 'error')
+            return redirect(url_for('dashboard'))
+        db.delete_task(task_id)
+        flash('Task deleted.', 'success')
+        return redirect(url_for('dashboard'))
+
     @app.route('/edit-task/<int:task_id>', methods=['GET', 'POST'])
     def edit_task(task_id):
         task = db.get_task_by_id(task_id)

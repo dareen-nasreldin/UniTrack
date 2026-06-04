@@ -1,24 +1,28 @@
 {% extends "base.html" %}
-
 {% block title %}Quick Note - UniTrack{% endblock %}
 
 {% block content %}
 <div class="form-container">
-    <h2 class="page-title">📝 Quick Note</h2>
+    <h2 class="page-title">
+        <!-- Lightning bolt — quick capture -->
+        <svg class="page-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 2L4 11h7l-2 7 9-10h-7l2-6z"/>
+        </svg>
+        Quick Note
+    </h2>
     <p class="form-description">Dump a task into your Inbox — no details needed right now.</p>
 
     <form method="POST" action="{{ url_for('add_quick_note') }}" class="form">
         <div class="form-group">
-            <label for="title" class="form-label">Task Title</label>
+            <label for="title" class="form-label">Task title</label>
             <input type="text"
                    id="title"
                    name="title"
                    class="form-input"
-                   placeholder="e.g., Study for midterm, Submit internship app..."
+                   placeholder="e.g. Study for midterm, Submit internship app..."
                    required
                    autofocus>
         </div>
-
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Add to Inbox</button>
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>

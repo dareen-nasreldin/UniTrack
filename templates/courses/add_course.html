@@ -1,24 +1,25 @@
 {% extends "base.html" %}
-
 {% block title %}Add Course - UniTrack{% endblock %}
 
 {% block content %}
 <div class="form-container">
-    <h2 class="page-title">➕ Add Course</h2>
-    <p class="form-description">Create a new course or context (e.g., "ECE241", "Internships", "Personal Projects").</p>
+    <h2 class="page-title">
+        <!-- Plus circle icon -->
+        <svg class="page-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+            <circle cx="10" cy="10" r="8"/>
+            <path d="M10 6v8M6 10h8"/>
+        </svg>
+        Add Course
+    </h2>
+    <p class="form-description">Create a new course or context — e.g. ECE241, Internships, Personal Projects.</p>
 
     <form method="POST" action="{{ url_for('add_course') }}" class="form">
         <div class="form-group">
-            <label for="name" class="form-label">Course Name</label>
-            <input type="text"
-                   id="name"
-                   name="name"
-                   class="form-input"
-                   placeholder="e.g., ECE241, Internships, Personal Projects..."
-                   required
-                   autofocus>
+            <label for="name" class="form-label">Course name</label>
+            <input type="text" id="name" name="name" class="form-input"
+                   placeholder="e.g. ECE241, Internships, Personal Projects"
+                   required autofocus>
         </div>
-
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Add Course</button>
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
