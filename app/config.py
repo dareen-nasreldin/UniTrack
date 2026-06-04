@@ -1,12 +1,10 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
-    DATABASE_PATH = os.environ.get('DATABASE_PATH', os.path.join(BASE_DIR, 'unitrack.db'))
-    DEBUG = False
+    SECRET_KEY    = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
+    DATABASE_URL  = os.environ.get('DATABASE_URL')
+    DEBUG         = False
 
 
 class DevelopmentConfig(Config):
@@ -14,14 +12,13 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    DEBUG = False
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    # /tmp is the only writable path on serverless platforms (Vercel)
-    DATABASE_PATH = os.environ.get('DATABASE_PATH', '/tmp/unitrack.db')
+    DEBUG        = False
+    SECRET_KEY   = os.environ.get('SECRET_KEY')
+    DATABASE_URL = os.environ.get('DATABASE_URL')
 
 
 config_map = {
     'development': DevelopmentConfig,
-    'production': ProductionConfig,
-    'default': DevelopmentConfig,
+    'production':  ProductionConfig,
+    'default':     DevelopmentConfig,
 }

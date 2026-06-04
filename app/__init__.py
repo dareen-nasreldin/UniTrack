@@ -19,7 +19,7 @@ def create_app(config_name=None):
     app.config.from_object(config_map.get(config_name, config_map['development']))
 
     from .database import Database
-    db = Database(app.config['DATABASE_PATH'])
+    db = Database(app.config['DATABASE_URL'])
 
     # Flask-Login
     login_manager = LoginManager()
