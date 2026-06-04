@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
-{% block title %}Add Quick Note - UniTrack{% endblock %}
+{% block title %}Quick Note - UniTrack{% endblock %}
 
 {% block content %}
 <div class="form-container">
-    <h2 class="page-title">📝 Quick Note (Inbox)</h2>
-    <p class="form-description">Quickly add a task to your Inbox for later processing.</p>
-    
+    <h2 class="page-title">📝 Quick Note</h2>
+    <p class="form-description">Dump a task into your Inbox — no details needed right now.</p>
+
     <form method="POST" action="{{ url_for('add_quick_note') }}" class="form">
         <div class="form-group">
             <label for="title" class="form-label">Task Title</label>
-            <input type="text" 
-                   id="title" 
-                   name="title" 
-                   class="form-input" 
-                   placeholder="Enter task title..."
+            <input type="text"
+                   id="title"
+                   name="title"
+                   class="form-input"
+                   placeholder="e.g., Study for midterm, Submit internship app..."
                    required
                    autofocus>
         </div>
-        
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Add to Inbox</button>
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>

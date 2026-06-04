@@ -5,25 +5,25 @@
 {% block content %}
 <div class="form-container">
     <h2 class="page-title">✏️ Edit Task</h2>
-    <p class="form-description">Update task details. Fix any spelling mistakes or change course assignments.</p>
-    
+    <p class="form-description">Update task details, fix typos, or change course assignments.</p>
+
     <form method="POST" action="{{ url_for('edit_task', task_id=task.id) }}" class="form">
         <div class="form-group">
             <label for="title" class="form-label">Task Title</label>
-            <input type="text" 
-                   id="title" 
-                   name="title" 
-                   class="form-input" 
+            <input type="text"
+                   id="title"
+                   name="title"
+                   class="form-input"
                    value="{{ task.title }}"
                    placeholder="Enter task title..."
                    required
                    autofocus>
         </div>
-        
+
         <div class="form-group">
             <label for="course_id" class="form-label">Course</label>
-            <select id="course_id" 
-                    name="course_id" 
+            <select id="course_id"
+                    name="course_id"
                     class="form-select"
                     onchange="toggleNewCourseInput()">
                 <option value="none" {% if not task.course_id %}selected{% endif %}>-- No Course (Unassigned) --</option>
@@ -35,41 +35,40 @@
                 <option value="new">➕ Create New Course</option>
             </select>
         </div>
-        
+
         <div id="new_course_div" class="form-group" style="display: none;">
             <label for="new_course_name" class="form-label">New Course Name</label>
-            <input type="text" 
-                   id="new_course_name" 
-                   name="new_course_name" 
-                   class="form-input" 
+            <input type="text"
+                   id="new_course_name"
+                   name="new_course_name"
+                   class="form-input"
                    placeholder="Enter course name...">
         </div>
-        
+
         <div class="form-group">
             <label for="due_date" class="form-label">Due Date</label>
-            <input type="date" 
-                   id="due_date" 
-                   name="due_date" 
+            <input type="date"
+                   id="due_date"
+                   name="due_date"
                    class="form-input"
                    value="{{ task.due_date or '' }}">
         </div>
-        
+
         <div class="form-group">
             <label for="description" class="form-label">Description</label>
-            <textarea id="description" 
-                      name="description" 
-                      class="form-textarea" 
+            <textarea id="description"
+                      name="description"
+                      class="form-textarea"
                       rows="4"
                       placeholder="Add details like which lectures this is for, specific requirements, notes...">{{ task.description or '' }}</textarea>
             <small class="form-hint">e.g., "Lectures 5-7", "Chapters 3-4", "Project requirements"</small>
         </div>
-        
+
         <div class="form-info">
-            <p><strong>Task ID:</strong> {{ task.id }}</p>
-            <p><strong>Created:</strong> {{ task.created_at }}</p>
             <p><strong>Status:</strong> {{ task.status }}</p>
+            <p><strong>Created:</strong> {{ task.created_at[:10] if task.created_at else 'Unknown' }}</p>
         </div>
-        
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save Changes</button>
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
@@ -81,11 +80,7 @@
 function toggleNewCourseInput() {
     const select = document.getElementById('course_id');
     const newCourseDiv = document.getElementById('new_course_div');
-    if (select.value === 'new') {
-        newCourseDiv.style.display = 'block';
-    } else {
-        newCourseDiv.style.display = 'none';
-    }
+    newCourseDiv.style.display = select.value === 'new' ? 'block' : 'none';
 }
 </script>
 {% endblock %}

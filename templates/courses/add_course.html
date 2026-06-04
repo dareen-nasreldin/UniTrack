@@ -5,20 +5,20 @@
 {% block content %}
 <div class="form-container">
     <h2 class="page-title">➕ Add Course</h2>
-    <p class="form-description">Create a new course or context (e.g., "ECE241", "Internships").</p>
-    
+    <p class="form-description">Create a new course or context (e.g., "ECE241", "Internships", "Personal Projects").</p>
+
     <form method="POST" action="{{ url_for('add_course') }}" class="form">
         <div class="form-group">
             <label for="name" class="form-label">Course Name</label>
-            <input type="text" 
-                   id="name" 
-                   name="name" 
-                   class="form-input" 
+            <input type="text"
+                   id="name"
+                   name="name"
+                   class="form-input"
                    placeholder="e.g., ECE241, Internships, Personal Projects..."
                    required
                    autofocus>
         </div>
-        
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Add Course</button>
             <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
