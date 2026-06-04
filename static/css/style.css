@@ -207,6 +207,51 @@ body {
   color: var(--nav-text);
 }
 
+.nav-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.12);
+  margin: 0 0.25rem;
+  align-self: center;
+}
+
+.nav-email {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 0.5rem;
+  font-size: 0.8125rem;
+  color: #64748B;   /* slate-500 — subtle, not competing with nav links */
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-signout {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: #94A3B8;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 0.75rem;
+  border-radius: var(--radius);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-signout:hover {
+  color: var(--nav-text);
+  background: rgba(255,255,255,0.08);
+}
+.nav-signout:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.5);
+  outline-offset: 2px;
+}
+
 /* =====================================================
    Layout
    ===================================================== */

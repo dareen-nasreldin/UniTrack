@@ -36,11 +36,20 @@
                 </button>
 
                 <ul class="nav-menu" id="navMenu">
-                    <li><a href="{{ url_for('dashboard') }}"    class="nav-link">Dashboard</a></li>
-                    <li><a href="{{ url_for('calendar_view') }}" class="nav-link">Calendar</a></li>
+                    <li><a href="{{ url_for('dashboard') }}"     class="nav-link">Dashboard</a></li>
+                    <li><a href="{{ url_for('calendar_view') }}"  class="nav-link">Calendar</a></li>
                     <li><a href="{{ url_for('add_quick_note') }}" class="nav-link">Quick Note</a></li>
-                    <li><a href="{{ url_for('process_inbox') }}" class="nav-link">Process Inbox</a></li>
-                    <li><a href="{{ url_for('add_course') }}"   class="nav-link">Add Course</a></li>
+                    <li><a href="{{ url_for('process_inbox') }}"  class="nav-link">Process Inbox</a></li>
+                    <li><a href="{{ url_for('add_course') }}"    class="nav-link">Add Course</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-divider" aria-hidden="true"></li>
+                    <li><span class="nav-email">{{ current_user.email }}</span></li>
+                    <li>
+                        <form method="POST" action="{{ url_for('auth.logout') }}">
+                            <button type="submit" class="nav-link nav-signout">Sign out</button>
+                        </form>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

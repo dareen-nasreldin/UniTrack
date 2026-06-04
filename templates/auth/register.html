@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - UniTrack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .auth-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow-md);
+        }
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 1.75rem;
+            text-decoration: none;
+        }
+        .auth-logo-mark {
+            width: 28px; height: 28px;
+            background: var(--nav-bg);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .auth-title { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); margin-bottom: 0.25rem; }
+        .auth-sub   { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+        .auth-footer { margin-top: 1.25rem; text-align: center; font-size: 0.875rem; color: var(--text-muted); }
+        .auth-footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+        .auth-footer a:hover { text-decoration: underline; }
+        .password-hint { font-size: 0.8125rem; color: var(--text-faint); margin-top: 0.25rem; }
+    </style>
+</head>
+<body>
+<div class="auth-wrap">
+    <div class="auth-card">
+        <a href="#" class="auth-logo">
+            <div class="auth-logo-mark">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <polyline points="4,17 9,11 13,14 19,7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="4"  cy="17" r="2" fill="white"/>
+                    <circle cx="9"  cy="11" r="2" fill="white"/>
+                    <circle cx="13" cy="14" r="2" fill="white"/>
+                    <circle cx="19" cy="7"  r="2" fill="white"/>
+                </svg>
+            </div>
+            UniTrack
+        </a>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}" role="alert" style="margin-bottom:1rem">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <p class="auth-title">Create an account</p>
+        <p class="auth-sub">Track your courses and internship applications.</p>
+
+        <form method="POST" action="{{ url_for('auth.register') }}" class="form">
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-input"
+                       placeholder="you@example.com" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-input"
+                       placeholder="••••••••" required minlength="8">
+                <small class="password-hint">At least 8 characters</small>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password" class="form-label">Confirm password</label>
+                <input type="password" id="confirm_password" name="confirm_password"
+                       class="form-input" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.25rem">
+                Create Account
+            </button>
+        </form>
+
+        <p class="auth-footer">
+            Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>
