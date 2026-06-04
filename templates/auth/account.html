@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Account - UniTrack{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="page-title">
+        <svg class="page-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="10" cy="7" r="4"/>
+            <path d="M2 18c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        Account
+    </h2>
+
+    <div class="form-card">
+        <div class="form-section">
+            <label class="form-label">Email</label>
+            <p class="account-email">{{ current_user.email }}</p>
+        </div>
+    </div>
+
+    <div class="form-card danger-zone">
+        <h3 class="danger-zone-title">Delete account</h3>
+        <p class="danger-zone-desc">Permanently delete your account and all tasks. This cannot be undone.</p>
+        <form method="POST" action="{{ url_for('auth.delete_account') }}"
+              onsubmit="return confirm('Delete your account and all data? This cannot be undone.')">
+            <button type="submit" class="btn btn-danger">Delete my account</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

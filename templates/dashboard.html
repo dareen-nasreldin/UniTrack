@@ -32,7 +32,7 @@
     </div>
     {% endif %}
 
-    {% if not tasks_by_course and not unassigned_tasks and not inbox_items %}
+    {% if not tasks_by_course and not unassigned_tasks and not inbox_items and not done_by_course and not done_unassigned %}
     <div class="empty-state">
         <p class="empty-text">No tasks yet. Add one to get started.</p>
         <a href="{{ url_for('add_quick_note') }}" class="btn btn-primary">Add Quick Note</a>
@@ -63,6 +63,42 @@
         {% endfor %}
 
     </div>
+
+    {% if done_by_course or done_unassigned %}
+    <details class="completed-section">
+        <summary class="completed-summary">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3 3 7-7"/></svg>
+            Completed
+            <span class="completed-count">{{ done_unassigned|length + done_by_course.values()|map('length')|sum }}</span>
+        </summary>
+        <div class="completed-tasks-body">
+
+            {% if done_unassigned %}
+            <div class="course-group">
+                <h3 class="course-header course-header-done">Unassigned</h3>
+                <div class="tasks-grid">
+                    {% for task in done_unassigned %}
+                    {% include '_done_task_card.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% for course_name, course_tasks in done_by_course.items() %}
+            <div class="course-group">
+                <h3 class="course-header course-header-done">{{ course_name }}</h3>
+                <div class="tasks-grid">
+                    {% for task in course_tasks %}
+                    {% include '_done_task_card.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </details>
+    {% endif %}
+
     {% endif %}
 </div>
 {% endblock %}

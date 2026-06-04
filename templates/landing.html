@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniTrack</title>
+    <meta name="description" content="The minimal task manager for university students. Quick capture, organized by course, deadline calendar.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* =====================================================
+           Landing page — uses Slate Pro CSS vars from style.css
+           ===================================================== */
+
+        body { background: #fff; overflow-x: hidden; }
+
+        /* ── Navbar ─────────────────────────────────────── */
+        .l-nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,0.90);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+        }
+        .l-nav-inner {
+            max-width: 1120px; margin: 0 auto; padding: 0 1.5rem;
+            height: 58px; display: flex; align-items: center;
+            justify-content: space-between;
+        }
+        .l-logo {
+            display: flex; align-items: center; gap: 0.5rem;
+            text-decoration: none; font-weight: 700; font-size: 0.9375rem;
+            color: var(--text);
+        }
+        .l-logo-mark {
+            width: 28px; height: 28px; background: var(--nav-bg);
+            border-radius: 6px; display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .l-nav-actions { display: flex; align-items: center; gap: 0.625rem; }
+        .l-nav-ghost {
+            font-size: 0.875rem; font-weight: 500; color: var(--text-muted);
+            text-decoration: none; padding: 0.375rem 0.75rem;
+            border-radius: var(--radius); transition: color 0.15s;
+        }
+        .l-nav-ghost:hover { color: var(--text); }
+
+        /* ── Hero ────────────────────────────────────────── */
+        .hero {
+            padding: 136px 1.5rem 96px;
+            max-width: 1120px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 5rem; align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.3rem 0.875rem 0.3rem 0.5rem;
+            border: 1px solid var(--border); border-radius: 999px;
+            font-size: 0.8rem; font-weight: 500; color: var(--text-muted);
+            margin-bottom: 1.5rem; background: var(--surface);
+        }
+        .hero-badge-dot {
+            width: 7px; height: 7px; background: var(--accent);
+            border-radius: 50%;
+            animation: pulse-dot 2.5s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,100% { opacity:1; transform:scale(1); }
+            50%      { opacity:0.4; transform:scale(0.7); }
+        }
+
+        .hero-heading {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: clamp(2.25rem, 3.75vw, 3.375rem);
+            line-height: 1.12; letter-spacing: -0.025em;
+            color: var(--text); margin-bottom: 1.25rem;
+        }
+        .hero-heading em {
+            font-style: italic; color: var(--accent);
+        }
+
+        .hero-sub {
+            font-size: 1.0625rem; line-height: 1.72;
+            color: var(--text-muted); margin-bottom: 2rem; max-width: 430px;
+        }
+
+        .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+
+        .hero-note {
+            margin-top: 1.375rem; font-size: 0.8125rem;
+            color: var(--text-faint); display: flex; align-items: center; gap: 0.4rem;
+        }
+
+        /* ── App Mockup ───────────────────────────────────── */
+        .mockup-wrap { perspective: 1100px; }
+
+        .mockup-stage {
+            transform: rotateY(-15deg) rotateX(5deg);
+            transform-style: preserve-3d;
+            transition: transform 0.65s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: float-stage 7s ease-in-out infinite;
+            will-change: transform;
+        }
+        .mockup-wrap:hover .mockup-stage {
+            transform: rotateY(-3deg) rotateX(1deg);
+            animation-play-state: paused;
+        }
+        @keyframes float-stage {
+            0%,100% { transform: rotateY(-15deg) rotateX(5deg) translateY(0); }
+            50%      { transform: rotateY(-15deg) rotateX(5deg) translateY(-12px); }
+        }
+
+        .mockup-window {
+            background: #0B1121;
+            border-radius: 13px;
+            border: 1px solid rgba(255,255,255,0.07);
+            box-shadow:
+                0 40px 80px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.03) inset,
+                0 -4px 24px rgba(79,70,229,0.1) inset;
+            overflow: hidden; font-size: 0.73rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .mockup-bar {
+            background: #060D1A; padding: 0.7rem 1rem;
+            display: flex; align-items: center; gap: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .m-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .m-dot-r { background: #FF5F57; }
+        .m-dot-y { background: #FFBD2E; }
+        .m-dot-g { background: #28C840; }
+        .mockup-url-bar {
+            flex: 1; text-align: center;
+            background: rgba(255,255,255,0.04); border-radius: 5px;
+            padding: 0.25rem 0; color: rgba(255,255,255,0.22);
+            font-size: 0.6875rem; font-family: monospace; letter-spacing: 0.01em;
+        }
+
+        .mockup-body { padding: 0.875rem; display: flex; flex-direction: column; gap: 0.75rem; }
+
+        .m-alert {
+            background: rgba(79,70,229,0.12); border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 6px; padding: 0.5rem 0.7rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .m-alert-txt { color: #A5B4FC; font-size: 0.65rem; font-weight: 600; }
+        .m-alert-btn {
+            background: #4F46E5; color: white; border-radius: 4px;
+            padding: 0.175rem 0.5rem; font-size: 0.6rem; font-weight: 700;
+        }
+
+        .m-label {
+            font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em;
+            text-transform: uppercase; color: rgba(255,255,255,0.22);
+            padding-bottom: 0.35rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .m-card {
+            background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 6px; padding: 0.55rem 0.65rem;
+        }
+        .m-card-row {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 0.3rem;
+        }
+        .m-card-title { color: rgba(255,255,255,0.82); font-weight: 600; font-size: 0.685rem; }
+        .m-actions { display: flex; gap: 2px; }
+        .m-act {
+            width: 15px; height: 15px; border-radius: 3px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .m-act-g { background: rgba(22,163,74,0.15); }
+        .m-act-i { background: rgba(99,102,241,0.15); }
+        .m-act-r { background: rgba(220,38,38,0.13); }
+        .m-meta {
+            display: flex; align-items: center; gap: 0.3rem;
+            color: rgba(255,255,255,0.28); font-size: 0.6rem;
+        }
+
+        /* ── Divider ─────────────────────────────────────── */
+        .l-divider {
+            border: none; border-top: 1px solid var(--border);
+            max-width: 1120px; margin: 0 auto;
+        }
+
+        /* ── Features ────────────────────────────────────── */
+        .l-features { padding: 96px 1.5rem; max-width: 1120px; margin: 0 auto; }
+
+        .l-section-chip {
+            font-size: 0.73rem; font-weight: 700; letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 0.875rem;
+        }
+        .l-section-h {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: clamp(1.75rem, 2.75vw, 2.5rem);
+            line-height: 1.18; letter-spacing: -0.025em;
+            color: var(--text); margin-bottom: 0.875rem; max-width: 460px;
+        }
+        .l-section-sub {
+            font-size: 1rem; color: var(--text-muted); line-height: 1.7;
+            max-width: 460px; margin-bottom: 3rem;
+        }
+
+        .feat-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+        }
+        .feat-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 1.5rem;
+            transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+        }
+        .feat-card:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .feat-icon {
+            width: 40px; height: 40px; background: var(--accent-light);
+            border-radius: var(--radius-md); display: flex;
+            align-items: center; justify-content: center;
+            color: var(--accent); margin-bottom: 1rem; flex-shrink: 0;
+        }
+        .feat-title { font-size: 0.9375rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+        .feat-desc  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.65; }
+
+        /* ── How it works ────────────────────────────────── */
+        .l-how { background: var(--bg); padding: 96px 1.5rem; }
+        .l-how-inner { max-width: 1120px; margin: 0 auto; }
+
+        .steps-row {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem; margin-top: 3rem; position: relative;
+        }
+        .steps-row::before {
+            content: '';
+            position: absolute; top: 27px;
+            left: calc(16.5% + 1rem); right: calc(16.5% + 1rem);
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--border) 100%);
+        }
+        .step-num {
+            width: 54px; height: 54px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.9375rem;
+            margin-bottom: 1.25rem; position: relative; z-index: 1;
+            flex-shrink: 0;
+        }
+        .step-num-active { background: var(--accent); color: white; }
+        .step-num-idle {
+            background: var(--surface); border: 2px solid var(--border);
+            color: var(--text-faint);
+        }
+        .step-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+        .step-desc  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.65; }
+
+        /* ── CTA ─────────────────────────────────────────── */
+        .l-cta {
+            background: var(--nav-bg);
+            padding: 104px 1.5rem; text-align: center;
+        }
+        .l-cta-chip {
+            font-size: 0.73rem; font-weight: 700; letter-spacing: 0.1em;
+            text-transform: uppercase; color: #6366F1; margin-bottom: 1rem;
+        }
+        .l-cta-h {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.18;
+            letter-spacing: -0.025em; color: white; margin-bottom: 1rem;
+            max-width: 540px; margin-left: auto; margin-right: auto;
+        }
+        .l-cta-sub {
+            font-size: 1rem; color: #475569;
+            margin-bottom: 2.5rem; max-width: 360px;
+            margin-left: auto; margin-right: auto; line-height: 1.65;
+        }
+        .l-cta-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.875rem 2rem; background: var(--accent); color: white;
+            border-radius: var(--radius-md); font-weight: 700; font-size: 0.9375rem;
+            text-decoration: none; transition: background 0.15s, transform 0.1s;
+        }
+        .l-cta-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+        /* ── Footer ──────────────────────────────────────── */
+        .l-footer {
+            background: var(--nav-bg);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 2rem 1.5rem;
+        }
+        .l-footer-inner {
+            max-width: 1120px; margin: 0 auto;
+            display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 1rem;
+        }
+        .l-flogo {
+            display: flex; align-items: center; gap: 0.5rem;
+            text-decoration: none; font-weight: 600; font-size: 0.875rem;
+            color: rgba(255,255,255,0.55);
+        }
+        .l-flinks { display: flex; gap: 1.5rem; }
+        .l-flink {
+            font-size: 0.8125rem; color: rgba(255,255,255,0.35);
+            text-decoration: none; transition: color 0.15s;
+        }
+        .l-flink:hover { color: rgba(255,255,255,0.75); }
+        .l-fcopy { font-size: 0.8125rem; color: rgba(255,255,255,0.2); }
+
+        /* ── Entrance animations ─────────────────────────── */
+        .fu { opacity: 0; transform: translateY(18px); animation: fu-in 0.6s ease forwards; }
+        @keyframes fu-in { to { opacity:1; transform:translateY(0); } }
+        .fu-1 { animation-delay: 0.08s; }
+        .fu-2 { animation-delay: 0.18s; }
+        .fu-3 { animation-delay: 0.30s; }
+        .fu-4 { animation-delay: 0.44s; }
+        .fu-5 { animation-delay: 0.56s; }
+        .fu-6 { animation-delay: 0.32s; }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 960px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 120px 1.5rem 64px;
+                gap: 3rem; text-align: center;
+            }
+            .hero-sub, .hero-note { margin-left: auto; margin-right: auto; }
+            .hero-actions { justify-content: center; }
+            .hero-badge { margin-left: auto; margin-right: auto; }
+            .mockup-stage {
+                transform: rotateY(0deg) rotateX(0deg);
+                animation: none;
+            }
+            .mockup-wrap:hover .mockup-stage { transform: none; }
+            .feat-grid { grid-template-columns: 1fr; }
+            .steps-row { grid-template-columns: 1fr; }
+            .steps-row::before { display: none; }
+        }
+        @media (max-width: 600px) {
+            .l-footer-inner { flex-direction: column; align-items: flex-start; }
+            .l-flinks { flex-wrap: wrap; gap: 1rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .fu { animation: none; opacity: 1; transform: none; }
+            .mockup-stage { animation: none; }
+            .hero-badge-dot { animation: none; }
+            .feat-card:hover { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ────── Navbar ────── -->
+<nav class="l-nav" aria-label="Site navigation">
+    <div class="l-nav-inner">
+        <a href="{{ url_for('dashboard') }}" class="l-logo">
+            <div class="l-logo-mark">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <polyline points="4,17 9,11 13,14 19,7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="4"  cy="17" r="2" fill="white"/>
+                    <circle cx="9"  cy="11" r="2" fill="white"/>
+                    <circle cx="13" cy="14" r="2" fill="white"/>
+                    <circle cx="19" cy="7"  r="2" fill="white"/>
+                </svg>
+            </div>
+            UniTrack
+        </a>
+        <div class="l-nav-actions">
+            <a href="{{ url_for('auth.login') }}" class="l-nav-ghost">Sign in</a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-small">Get started free</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ────── Hero ────── -->
+<section class="hero" aria-labelledby="hero-heading">
+    <!-- Left: Text -->
+    <div>
+        <div class="hero-badge fu fu-1">
+            <span class="hero-badge-dot" aria-hidden="true"></span>
+            Free for students
+        </div>
+
+        <h1 class="hero-heading fu fu-2" id="hero-heading">
+            Stop losing track<br>of <em>your semester</em>
+        </h1>
+
+        <p class="hero-sub fu fu-3">
+            UniTrack is the minimal task manager built for university life: quick capture, organized by course, deadline calendar. No bloat, no learning curve.
+        </p>
+
+        <div class="hero-actions fu fu-4">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+                Create free account
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M2 6.5h9M7.5 2.5l4 4-4 4"/>
+                </svg>
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Sign in</a>
+        </div>
+
+        <p class="hero-note fu fu-5">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <circle cx="6.5" cy="6.5" r="5"/>
+                <path d="M2 6.5l3 3 6-6"/>
+            </svg>
+            Free for students. No credit card required.
+        </p>
+    </div>
+
+    <!-- Right: CSS App Mockup -->
+    <div class="mockup-wrap fu fu-6" aria-hidden="true">
+        <div class="mockup-stage">
+            <div class="mockup-window">
+                <!-- Browser chrome -->
+                <div class="mockup-bar">
+                    <span class="m-dot m-dot-r"></span>
+                    <span class="m-dot m-dot-y"></span>
+                    <span class="m-dot m-dot-g"></span>
+                    <div class="mockup-url-bar">unitrack.vercel.app</div>
+                </div>
+
+                <div class="mockup-body">
+                    <!-- Inbox alert -->
+                    <div class="m-alert">
+                        <span class="m-alert-txt">2 items waiting in Inbox</span>
+                        <span class="m-alert-btn">Process Now</span>
+                    </div>
+
+                    <!-- ECE241 -->
+                    <div class="m-label">ECE241</div>
+                    <div class="m-card">
+                        <div class="m-card-row">
+                            <span class="m-card-title">Lab Report 3</span>
+                            <div class="m-actions">
+                                <span class="m-act m-act-g"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3.5l2 2 3-3"/></svg></span>
+                                <span class="m-act m-act-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#818CF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 1l1.5 1.5-4 4H.5V5L4.5 1z"/></svg></span>
+                                <span class="m-act m-act-r"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#F87171" stroke-width="1.5" stroke-linecap="round"><path d="M.5 2h6M2.5 2V1.5h2V2M1.5 2l.5 4.5h3L5.5 2"/></svg></span>
+                            </div>
+                        </div>
+                        <div class="m-meta">
+                            <svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x=".5" y=".75" width="6" height="5.5" rx="1"/><path d="M.5 2.5h6M2 0v1.5M5 0v1.5"/></svg>
+                            Oct 15, 2026
+                        </div>
+                    </div>
+                    <div class="m-card">
+                        <div class="m-card-row">
+                            <span class="m-card-title">Midterm Review</span>
+                            <div class="m-actions">
+                                <span class="m-act m-act-g"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3.5l2 2 3-3"/></svg></span>
+                                <span class="m-act m-act-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#818CF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 1l1.5 1.5-4 4H.5V5L4.5 1z"/></svg></span>
+                                <span class="m-act m-act-r"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#F87171" stroke-width="1.5" stroke-linecap="round"><path d="M.5 2h6M2.5 2V1.5h2V2M1.5 2l.5 4.5h3L5.5 2"/></svg></span>
+                            </div>
+                        </div>
+                        <div class="m-meta">
+                            <svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x=".5" y=".75" width="6" height="5.5" rx="1"/><path d="M.5 2.5h6M2 0v1.5M5 0v1.5"/></svg>
+                            Oct 22, 2026
+                        </div>
+                    </div>
+
+                    <!-- Internships -->
+                    <div class="m-label">Internships</div>
+                    <div class="m-card">
+                        <div class="m-card-row">
+                            <span class="m-card-title">Amazon SDE Application</span>
+                            <div class="m-actions">
+                                <span class="m-act m-act-g"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3.5l2 2 3-3"/></svg></span>
+                                <span class="m-act m-act-i"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#818CF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 1l1.5 1.5-4 4H.5V5L4.5 1z"/></svg></span>
+                                <span class="m-act m-act-r"><svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="#F87171" stroke-width="1.5" stroke-linecap="round"><path d="M.5 2h6M2.5 2V1.5h2V2M1.5 2l.5 4.5h3L5.5 2"/></svg></span>
+                            </div>
+                        </div>
+                        <div class="m-meta">
+                            <svg width="7" height="7" viewBox="0 0 7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x=".5" y=".75" width="6" height="5.5" rx="1"/><path d="M.5 2.5h6M2 0v1.5M5 0v1.5"/></svg>
+                            Nov 1, 2026
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="l-divider">
+
+<!-- ────── Features ────── -->
+<section class="l-features" aria-labelledby="features-heading">
+    <p class="l-section-chip">Features</p>
+    <h2 class="l-section-h" id="features-heading">Everything you need. Nothing you don't.</h2>
+    <p class="l-section-sub">No recurring habits tracker, no project management overhead, no team collaboration. Just tasks, courses, and deadlines.</p>
+
+    <div class="feat-grid">
+        <div class="feat-card">
+            <div class="feat-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M11 2L4 11h7l-2 7 9-10h-7l2-6z"/>
+                </svg>
+            </div>
+            <p class="feat-title">Quick capture</p>
+            <p class="feat-desc">Add a task with just a title. No course, no date, no description required. Dump it now, sort it later.</p>
+        </div>
+
+        <div class="feat-card">
+            <div class="feat-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="2" width="6" height="6" rx="1"/>
+                    <rect x="12" y="2" width="6" height="6" rx="1"/>
+                    <rect x="2" y="12" width="6" height="6" rx="1"/>
+                    <rect x="12" y="12" width="6" height="6" rx="1"/>
+                </svg>
+            </div>
+            <p class="feat-title">Organized by course</p>
+            <p class="feat-desc">Dashboard groups tasks by course: ECE241, MAT291, Internships. One view for your whole semester.</p>
+        </div>
+
+        <div class="feat-card">
+            <div class="feat-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+                    <rect x="2" y="3" width="16" height="15" rx="2"/>
+                    <path d="M2 8h16M6 1v3M14 1v3"/>
+                </svg>
+            </div>
+            <p class="feat-title">Deadline calendar</p>
+            <p class="feat-desc">A monthly calendar shows every task with a due date. See when crunch time hits before it hits you.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ────── How it works ────── -->
+<section class="l-how" aria-labelledby="how-heading">
+    <div class="l-how-inner">
+        <p class="l-section-chip">Workflow</p>
+        <h2 class="l-section-h" id="how-heading">Built around how you actually work</h2>
+        <p class="l-section-sub">Three steps. No system to maintain, no daily reviews, no app to babysit.</p>
+
+        <div class="steps-row">
+            <div>
+                <div class="step-num step-num-active">1</div>
+                <p class="step-title">Capture it now</p>
+                <p class="step-desc">In lecture, between classes, anywhere. Open UniTrack and type a title. Done in under five seconds. No other fields required.</p>
+            </div>
+            <div>
+                <div class="step-num step-num-idle">2</div>
+                <p class="step-title">Organize when you can</p>
+                <p class="step-desc">Your Inbox holds everything you dumped. When you have five minutes, go through it: assign courses, set due dates, add notes.</p>
+            </div>
+            <div>
+                <div class="step-num step-num-idle">3</div>
+                <p class="step-title">Track everything</p>
+                <p class="step-desc">Dashboard shows pending tasks by course. Calendar shows upcoming deadlines. Mark things done when they're done.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ────── CTA ────── -->
+<section class="l-cta" aria-labelledby="cta-heading">
+    <p class="l-cta-chip">Get started</p>
+    <h2 class="l-cta-h" id="cta-heading">Built for the student who has too much going on.</h2>
+    <p class="l-cta-sub">Free account. No setup required. Start in 30 seconds.</p>
+    <a href="{{ url_for('auth.register') }}" class="l-cta-btn">
+        Create your free account
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 7h10M8 3l4 4-4 4"/>
+        </svg>
+    </a>
+</section>
+
+<!-- ────── Footer ────── -->
+<footer class="l-footer" aria-label="Footer">
+    <div class="l-footer-inner">
+        <a href="{{ url_for('dashboard') }}" class="l-flogo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <polyline points="4,17 9,11 13,14 19,7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="4"  cy="17" r="2" fill="currentColor"/>
+                <circle cx="9"  cy="11" r="2" fill="currentColor"/>
+                <circle cx="13" cy="14" r="2" fill="currentColor"/>
+                <circle cx="19" cy="7"  r="2" fill="currentColor"/>
+            </svg>
+            UniTrack
+        </a>
+        <div class="l-flinks">
+            <a href="{{ url_for('auth.login') }}"    class="l-flink">Sign in</a>
+            <a href="{{ url_for('auth.register') }}" class="l-flink">Create account</a>
+        </div>
+        <p class="l-fcopy">Built for students, by a student.</p>
+    </div>
+</footer>
+
+</body>
+</html>

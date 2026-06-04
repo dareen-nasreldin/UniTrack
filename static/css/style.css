@@ -472,6 +472,75 @@ body {
 }
 
 /* =====================================================
+   Done task card
+   ===================================================== */
+
+.task-card-done {
+  opacity: 0.65;
+  background: var(--surface);
+}
+.task-card-done:hover { opacity: 1; }
+
+.task-title-done {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex: 1;
+  line-height: 1.4;
+  text-decoration: line-through;
+  text-decoration-color: var(--border-strong);
+}
+
+/* =====================================================
+   Completed section (dashboard <details> toggle)
+   ===================================================== */
+
+.completed-section {
+  margin-top: 2rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+.completed-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.completed-summary::-webkit-details-marker { display: none; }
+.completed-summary:hover { color: var(--text); }
+
+.completed-summary svg {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+details[open] .completed-summary svg { transform: rotate(90deg); }
+
+.completed-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 0.375rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-faint);
+}
+
+.completed-tasks-body { margin-top: 1.25rem; }
+
+.course-header-done { color: var(--text-faint); }
+
+/* =====================================================
    Task meta & description
    ===================================================== */
 
@@ -600,6 +669,44 @@ body {
   padding-top: 1.25rem;
   margin-top: 1.5rem;
   border-top: 1px solid var(--border);
+}
+
+/* =====================================================
+   Account page
+   ===================================================== */
+
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-section { margin-bottom: 0; }
+
+.account-email {
+  font-size: 0.9375rem;
+  color: var(--text);
+  margin-top: 0.25rem;
+}
+
+.danger-zone {
+  border-color: var(--danger-border);
+}
+
+.danger-zone-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--danger);
+  margin-bottom: 0.375rem;
+}
+
+.danger-zone-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
 }
 
 /* =====================================================

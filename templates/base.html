@@ -44,6 +44,7 @@
                     {% if current_user.is_authenticated %}
                     <li class="nav-divider" aria-hidden="true"></li>
                     <li><span class="nav-email">{{ current_user.email }}</span></li>
+                    <li><a href="{{ url_for('auth.account') }}" class="nav-link">Account</a></li>
                     <li>
                         <form method="POST" action="{{ url_for('auth.logout') }}">
                             <button type="submit" class="nav-link nav-signout">Sign out</button>

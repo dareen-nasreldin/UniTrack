@@ -59,10 +59,24 @@ def create_auth_blueprint(db):
 
         return render_template('auth/register.html')
 
+    @auth.route('/account')
+    @login_required
+    def account():
+        return render_template('auth/account.html')
+
+    @auth.route('/account/delete', methods=['POST'])
+    @login_required
+    def delete_account():
+        user_id = current_user.id
+        logout_user()
+        db.delete_user(user_id)
+        flash('Your account and all data have been deleted.', 'success')
+        return redirect(url_for('landing'))
+
     @auth.route('/logout', methods=['POST'])
     @login_required
     def logout():
         logout_user()
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('landing'))
 
     return auth

@@ -8,10 +8,17 @@ from datetime import datetime, date
 def register_routes(app, db):
 
     @app.route('/')
+    def landing():
+        if current_user.is_authenticated:
+            return redirect(url_for('dashboard'))
+        return render_template('landing.html')
+
+    @app.route('/dashboard')
     @login_required
     def dashboard():
-        inbox_items = db.get_inbox_items(current_user.id)
-        tasks = db.get_tasks_by_status("Pending", current_user.id)
+        inbox_items  = db.get_inbox_items(current_user.id)
+        tasks        = db.get_tasks_by_status("Pending", current_user.id)
+        done_tasks   = db.get_tasks_by_status("Done",    current_user.id)
 
         tasks_by_course, unassigned_tasks = {}, []
         for task in tasks:
@@ -21,10 +28,20 @@ def register_routes(app, db):
             else:
                 tasks_by_course.setdefault(name, []).append(task)
 
+        done_by_course, done_unassigned = {}, []
+        for task in done_tasks:
+            name = task["course_name"] or "Unassigned"
+            if name == "Unassigned":
+                done_unassigned.append(task)
+            else:
+                done_by_course.setdefault(name, []).append(task)
+
         return render_template('dashboard.html',
                                inbox_items=inbox_items,
                                tasks_by_course=tasks_by_course,
-                               unassigned_tasks=unassigned_tasks)
+                               unassigned_tasks=unassigned_tasks,
+                               done_by_course=done_by_course,
+                               done_unassigned=done_unassigned)
 
     @app.route('/add-quick-note', methods=['GET', 'POST'])
     @login_required

@@ -1,0 +1,25 @@
+<article class="task-card task-card-done">
+    <div class="task-header">
+        <div class="task-title task-title-done">{{ task.title }}</div>
+        <div class="task-actions">
+            <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}"
+                  onsubmit="return confirm('Delete this task?')">
+                <button type="submit" class="action-btn delete-btn"
+                        title="Delete task" aria-label="Delete: {{ task.title }}">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M1.5 3.5h10"/><path d="M4.5 3.5V2.5h4v1"/><path d="M3 3.5l.5 8h6l.5-8"/></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% if task.due_date %}
+    <div class="task-meta">
+        <span class="task-due-date">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <rect x="1" y="2" width="10" height="9" rx="1.5"/><path d="M1 5.5h10M4 1v2M8 1v2"/>
+            </svg>
+            {{ task.due_date }}
+        </span>
+    </div>
+    {% endif %}
+</article>

@@ -233,6 +233,14 @@ class Database:
             )
         conn.commit()
 
+    def delete_user(self, user_id: int) -> None:
+        conn = self.get_connection()
+        with conn.cursor() as c:
+            c.execute("DELETE FROM tasks   WHERE user_id = %s", (user_id,))
+            c.execute("DELETE FROM courses WHERE user_id = %s", (user_id,))
+            c.execute("DELETE FROM users   WHERE id = %s",      (user_id,))
+        conn.commit()
+
     def close(self) -> None:
         conn = getattr(self.local, 'conn', None)
         if conn and not conn.closed:
