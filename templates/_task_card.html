@@ -13,13 +13,18 @@
                title="Edit task" aria-label="Edit: {{ task.title }}">
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 1.5l2.5 2.5-7.5 7.5H1.5V9L9 1.5z"/><path d="M8 2.5l2.5 2.5"/></svg>
             </a>
-            <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}"
-                  onsubmit="return confirm('Delete this task?')">
-                <button type="submit" class="action-btn delete-btn"
+            <div class="del-wrap">
+                <button type="button" class="action-btn delete-btn del-trigger"
                         title="Delete task" aria-label="Delete: {{ task.title }}">
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M1.5 3.5h10"/><path d="M4.5 3.5V2.5h4v1"/><path d="M3 3.5l.5 8h6l.5-8"/></svg>
                 </button>
-            </form>
+                <div class="del-confirm">
+                    <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}">
+                        <button type="submit" class="del-yes-icon" title="Confirm delete" aria-label="Confirm delete">✓</button>
+                    </form>
+                    <button type="button" class="del-no-icon del-no" title="Cancel" aria-label="Cancel delete">✗</button>
+                </div>
+            </div>
         </div>
     </div>
 

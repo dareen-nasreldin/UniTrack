@@ -11,20 +11,26 @@
         Account
     </h2>
 
-    <div class="form-card">
-        <div class="form-section">
-            <label class="form-label">Email</label>
-            <p class="account-email">{{ current_user.email }}</p>
-        </div>
+    <div class="form-group">
+        <label class="form-label">Email</label>
+        <p class="account-email">{{ current_user.email }}</p>
     </div>
 
-    <div class="form-card danger-zone">
-        <h3 class="danger-zone-title">Delete account</h3>
-        <p class="danger-zone-desc">Permanently delete your account and all tasks. This cannot be undone.</p>
-        <form method="POST" action="{{ url_for('auth.delete_account') }}"
-              onsubmit="return confirm('Delete your account and all data? This cannot be undone.')">
-            <button type="submit" class="btn btn-danger">Delete my account</button>
-        </form>
+    <div class="task-secondary-actions" style="margin-top:2rem;border-top:1px solid var(--border);padding-top:1.5rem">
+        <div>
+            <p style="font-size:0.875rem;font-weight:700;color:var(--danger);margin-bottom:0.25rem">Delete account</p>
+            <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:1rem">Permanently removes your account and all tasks. Cannot be undone.</p>
+            <div class="del-wrap" style="display:block">
+                <button type="button" class="btn btn-danger del-trigger">Delete my account</button>
+                <div class="del-confirm del-confirm-banner">
+                    <span class="del-confirm-banner-text">Delete your account and all data? This cannot be undone.</span>
+                    <form method="POST" action="{{ url_for('auth.delete_account') }}">
+                        <button type="submit" class="btn btn-danger btn-small">Yes, delete everything</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary btn-small del-no">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -73,13 +73,19 @@
         {% else %}
         <p class="form-hint" style="color:var(--success);font-style:normal">This task is already marked as done.</p>
         {% endif %}
-        <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}"
-              onsubmit="return confirm('Delete this task? This cannot be undone.')">
-            <button type="submit" class="btn btn-danger">
+        <div class="del-wrap" style="display:block">
+            <button type="button" class="btn btn-danger del-trigger">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M1.5 3.5h11"/><path d="M4.5 3.5V2.5h5v1"/><path d="M3 3.5l.5 8.5h7l.5-8.5"/></svg>
                 Delete Task
             </button>
-        </form>
+            <div class="del-confirm del-confirm-banner">
+                <span class="del-confirm-banner-text">Delete this task? This cannot be undone.</span>
+                <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}">
+                    <button type="submit" class="btn btn-danger btn-small">Yes, delete</button>
+                </form>
+                <button type="button" class="btn btn-secondary btn-small del-no">Cancel</button>
+            </div>
+        </div>
     </div>
 </div>
 

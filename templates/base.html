@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}UniTrack{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -76,16 +79,33 @@
     (function () {
         var toggle = document.getElementById('navToggle');
         var menu   = document.getElementById('navMenu');
-        if (!toggle || !menu) return;
-        toggle.addEventListener('click', function () {
-            var open = menu.classList.toggle('nav-open');
-            toggle.setAttribute('aria-expanded', String(open));
-        });
-        menu.querySelectorAll('.nav-link').forEach(function (link) {
-            link.addEventListener('click', function () {
-                menu.classList.remove('nav-open');
-                toggle.setAttribute('aria-expanded', 'false');
+        if (toggle && menu) {
+            toggle.addEventListener('click', function () {
+                var open = menu.classList.toggle('nav-open');
+                toggle.setAttribute('aria-expanded', String(open));
             });
+            menu.querySelectorAll('.nav-link').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    menu.classList.remove('nav-open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
+        // Inline delete confirmation — no browser popups
+        document.addEventListener('click', function (e) {
+            var trigger = e.target.closest('.del-trigger');
+            var cancel  = e.target.closest('.del-no');
+            if (trigger) {
+                var wrap = trigger.closest('.del-wrap');
+                trigger.style.display = 'none';
+                wrap.querySelector('.del-confirm').style.display = 'flex';
+            }
+            if (cancel) {
+                var wrap = cancel.closest('.del-wrap');
+                wrap.querySelector('.del-confirm').style.display = 'none';
+                wrap.querySelector('.del-trigger').style.display = '';
+            }
         });
     })();
     </script>

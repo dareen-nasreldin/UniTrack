@@ -3,6 +3,7 @@ from typing import List, Optional, Dict
 
 import psycopg2
 import psycopg2.extras
+import psycopg2.extensions
 
 _UNSET = object()
 
@@ -17,11 +18,22 @@ class Database:
     def get_connection(self):
         conn = getattr(self.local, 'conn', None)
         if conn is None or conn.closed:
-            self.local.conn = psycopg2.connect(
+            conn = psycopg2.connect(
                 self.database_url,
                 cursor_factory=psycopg2.extras.RealDictCursor,
                 sslmode='require',
+                connect_timeout=10,
             )
+            conn.autocommit = False
+            self.local.conn = conn
+        else:
+            # Reset any aborted transaction so the connection stays usable
+            try:
+                if conn.status == psycopg2.extensions.STATUS_IN_TRANSACTION:
+                    conn.rollback()
+            except Exception:
+                conn.close()
+                return self.get_connection()
         return self.local.conn
 
     def init_db(self) -> None:
