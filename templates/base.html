@@ -41,7 +41,7 @@
                 <ul class="nav-menu" id="navMenu">
                     <li><a href="{{ url_for('dashboard') }}"     class="nav-link">Dashboard</a></li>
                     <li><a href="{{ url_for('calendar_view') }}"  class="nav-link">Calendar</a></li>
-                    <li><a href="{{ url_for('add_quick_note') }}" class="nav-link">Quick Note</a></li>
+                    <li><a href="{{ url_for('add_quick_note') }}" class="nav-link">Quick Note<span class="nav-shortcut" aria-hidden="true">N</span></a></li>
                     <li><a href="{{ url_for('process_inbox') }}"  class="nav-link">Process Inbox</a></li>
                     <li><a href="{{ url_for('add_course') }}"    class="nav-link">Add Course</a></li>
                     {% if current_user.is_authenticated %}
@@ -73,8 +73,6 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer"></footer>
-
     <script>
     (function () {
         var toggle = document.getElementById('navToggle');
@@ -91,6 +89,15 @@
                 });
             });
         }
+
+        // N → Quick Note from anywhere
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'n' && e.key !== 'N') return;
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+            var active = document.activeElement;
+            if (active && active.matches('input, textarea, select, [contenteditable]')) return;
+            window.location.href = '{{ url_for("add_quick_note") }}';
+        });
 
         // Inline delete confirmation — no browser popups
         document.addEventListener('click', function (e) {
@@ -109,5 +116,8 @@
         });
     })();
     </script>
+<!-- impeccable-live-start -->
+<script src="http://localhost:8400/live.js"></script>
+<!-- impeccable-live-end -->
 </body>
 </html>

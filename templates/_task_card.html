@@ -6,19 +6,22 @@
                 <button type="submit" class="action-btn complete-btn"
                         title="Mark as done" aria-label="Mark as done: {{ task.title }}">
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3 3 6-6"/></svg>
+                    <span class="action-label">Done</span>
                 </button>
             </form>
             <a href="{{ url_for('edit_task', task_id=task.id) }}"
                class="action-btn edit-btn"
                title="Edit task" aria-label="Edit: {{ task.title }}">
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 1.5l2.5 2.5-7.5 7.5H1.5V9L9 1.5z"/><path d="M8 2.5l2.5 2.5"/></svg>
+                <span class="action-label">Edit</span>
             </a>
             <div class="del-wrap">
                 <button type="button" class="action-btn delete-btn del-trigger"
                         title="Delete task" aria-label="Delete: {{ task.title }}">
                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M1.5 3.5h10"/><path d="M4.5 3.5V2.5h4v1"/><path d="M3 3.5l.5 8h6l.5-8"/></svg>
+                    <span class="action-label">Delete</span>
                 </button>
-                <div class="del-confirm">
+                <div class="del-confirm" aria-live="polite">
                     <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}">
                         <button type="submit" class="del-yes-icon" title="Confirm delete" aria-label="Confirm delete">✓</button>
                     </form>
@@ -34,11 +37,11 @@
 
     <div class="task-meta">
         {% if task.due_date %}
-        <span class="task-due-date">
+        <span class="task-due-date{% if task.due_status %} task-due-{{ task.due_status }}{% endif %}">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                 <rect x="1" y="2" width="10" height="9" rx="1.5"/><path d="M1 5.5h10M4 1v2M8 1v2"/>
             </svg>
-            {{ task.due_date }}
+            {{ task.due_label or task.due_date }}
         </span>
         {% else %}
         <span class="no-date">No due date</span>

@@ -31,3 +31,7 @@ Thumbs.db
 
 # Playwright
 .playwright-mcp/
+.vercel
+
+# Claude Code session data
+.claude/

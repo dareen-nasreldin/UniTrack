@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-05T00:00:00Z",
+  "title": "Design System: UniTrack",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Clarity Indigo",
+        "canonical": "#4F46E5",
+        "tonalRamp": ["#1e1b4b", "#2e27a0", "#3730a3", "#4338ca", "#4f46e5", "#6366f1", "#a5b4fc", "#eef2ff"]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Clarity Indigo Deep",
+        "canonical": "#4338CA",
+        "tonalRamp": ["#1e1b4b", "#2e27a0", "#3730a3", "#4338ca", "#4f46e5", "#6366f1", "#a5b4fc", "#eef2ff"]
+      },
+      "accent-light": {
+        "role": "primary",
+        "displayName": "Clarity Indigo Tint",
+        "canonical": "#EEF2FF",
+        "tonalRamp": ["#1e1b4b", "#2e27a0", "#3730a3", "#4338ca", "#4f46e5", "#6366f1", "#a5b4fc", "#eef2ff"]
+      },
+      "nav-bg": {
+        "role": "neutral",
+        "displayName": "Deep Slate",
+        "canonical": "#0F172A",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f8fafc"]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Page Mist",
+        "canonical": "#F8FAFC",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f8fafc"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Pure Surface",
+        "canonical": "#FFFFFF",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#ffffff"]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Receded Slate",
+        "canonical": "#F1F5F9",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f1f5f9"]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Deep Slate (text)",
+        "canonical": "#0F172A",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f8fafc"]
+      },
+      "text-muted": {
+        "role": "neutral",
+        "displayName": "Mid Slate",
+        "canonical": "#64748B",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f8fafc"]
+      },
+      "text-faint": {
+        "role": "neutral",
+        "displayName": "Faint Slate",
+        "canonical": "#94A3B8",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f8fafc"]
+      },
+      "success": {
+        "role": "tertiary",
+        "displayName": "Clear",
+        "canonical": "#16A34A",
+        "tonalRamp": ["#052e16", "#14532d", "#166534", "#15803d", "#16a34a", "#22c55e", "#86efac", "#f0fdf4"]
+      },
+      "danger": {
+        "role": "tertiary",
+        "displayName": "Alarm",
+        "canonical": "#DC2626",
+        "tonalRamp": ["#450a0a", "#7f1d1d", "#991b1b", "#b91c1c", "#dc2626", "#ef4444", "#fca5a5", "#fef2f2"]
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Caution",
+        "canonical": "#D97706",
+        "tonalRamp": ["#451a03", "#78350f", "#92400e", "#b45309", "#d97706", "#f59e0b", "#fcd34d", "#fffbeb"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Landing page hero and major section headings. DM Serif Display at its largest — one per page, never in the app interior." },
+      "title": { "displayName": "Title", "purpose": "App page-level headings (h2.page-title). One per screen. The only serif element inside the app UI." },
+      "body": { "displayName": "Body", "purpose": "Task titles, form copy, descriptions, all functional content. The default register." },
+      "label": { "displayName": "Label", "purpose": "Form field labels, nav links, button text, item metadata. Short runs only; never for body copy." },
+      "caption": { "displayName": "Caption", "purpose": "Course section headers in the dashboard. The only sanctioned uppercase tracked text in the app interior." }
+    },
+    "shadows": [
+      { "name": "ambient", "value": "0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.04)", "purpose": "Default resting elevation for all cards and containers. Always present; imperceptible in isolation." },
+      { "name": "hover-lift", "value": "0 4px 12px rgba(15,23,42,.07), 0 2px 4px rgba(15,23,42,.04)", "purpose": "Applied on card hover. Confirms interactivity. Transitions at 150ms." },
+      { "name": "modal", "value": "0 8px 24px rgba(15,23,42,.08), 0 4px 8px rgba(15,23,42,.04)", "purpose": "Reserved for dialogs and overlays that sit above page content." }
+    ],
+    "motion": [
+      { "name": "ease-state", "value": "0.15s ease", "purpose": "Default duration and easing for all state transitions (color, border, shadow, opacity)." },
+      { "name": "ease-reveal", "value": "0.18s ease", "purpose": "Short reveal animations (del-fadein, internship section open)." },
+      { "name": "ease-transform", "value": "0.2s ease", "purpose": "Transform-based transitions (hamburger lines, chevron rotation, badge pulse)." },
+      { "name": "pulse-dot", "value": "2.5s ease-in-out infinite", "purpose": "Landing page hero badge pulse animation. Opacity and scale cycle." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "480px", "purpose": "Hamburger nav activates, calendar gets minimum width treatment." },
+      { "name": "tablet", "value": "768px", "purpose": "Hamburger nav replaces horizontal nav menu." },
+      { "name": "content-max", "value": "1200px", "purpose": "Maximum content width for app interior." },
+      { "name": "landing-max", "value": "1120px", "purpose": "Maximum content width for landing page." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The primary call-to-action. Solid Clarity Indigo. One per form or section.",
+      "html": "<button class=\"ds-btn-primary\">Save changes</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; min-height: 36px; background: #4f46e5; color: #fff; border: 1px solid #4f46e5; border-radius: 8px; font-size: 0.875rem; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s; white-space: nowrap; } .ds-btn-primary:hover { background: #4338ca; border-color: #4338ca; } .ds-btn-primary:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The safe default action. White background, bordered. Paired next to a primary button.",
+      "html": "<button class=\"ds-btn-secondary\">Cancel</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; min-height: 36px; background: #fff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.875rem; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s; white-space: nowrap; } .ds-btn-secondary:hover { background: #f1f5f9; border-color: #cbd5e1; } .ds-btn-secondary:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Danger Button (Ghost)",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Destructive action in its default state — ghost red, requires a second confirmation step before executing.",
+      "html": "<button class=\"ds-btn-danger\">Delete task</button>",
+      "css": ".ds-btn-danger { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; min-height: 36px; background: #fff; color: #dc2626; border: 1px solid #fca5a5; border-radius: 8px; font-size: 0.875rem; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s; } .ds-btn-danger:hover { background: #fef2f2; border-color: #dc2626; } .ds-btn-danger:focus-visible { outline: 2px solid #dc2626; outline-offset: 2px; }"
+    },
+    {
+      "name": "Task Card",
+      "kind": "card",
+      "refersTo": "task-card",
+      "description": "The primary content unit. Holds a task title, optional description, due date, and the action strip.",
+      "html": "<article class=\"ds-task-card\"><div class=\"ds-task-header\"><div class=\"ds-task-title\">Write lab report — ENGG 301</div><div class=\"ds-task-actions\"><button class=\"ds-action-btn ds-complete-btn\" title=\"Mark done\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 13 13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 7l3 3 6-6\"/></svg></button><button class=\"ds-action-btn ds-edit-btn\" title=\"Edit\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 13 13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 1.5l2.5 2.5-7.5 7.5H1.5V9L9 1.5z\"/><path d=\"M8 2.5l2.5 2.5\"/></svg></button><button class=\"ds-action-btn ds-delete-btn\" title=\"Delete\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 13 13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"M1.5 3.5h10\"/><path d=\"M4.5 3.5V2.5h4v1\"/><path d=\"M3 3.5l.5 8h6l.5-8\"/></svg></button></div></div><div class=\"ds-task-meta\"><span class=\"ds-task-due\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"><rect x=\"1\" y=\"2\" width=\"10\" height=\"9\" rx=\"1.5\"/><path d=\"M1 5.5h10M4 1v2M8 1v2\"/></svg>Dec 14, 2025</span></div></article>",
+      "css": ".ds-task-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; box-shadow: 0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.04); transition: border-color 0.15s, box-shadow 0.15s; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; } .ds-task-card:hover { border-color: #cbd5e1; box-shadow: 0 4px 12px rgba(15,23,42,.07), 0 2px 4px rgba(15,23,42,.04); } .ds-task-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; } .ds-task-title { font-size: 0.9375rem; font-weight: 600; color: #0f172a; flex: 1; line-height: 1.4; } .ds-task-actions { display: flex; gap: 1px; align-items: center; flex-shrink: 0; background: #e2e8f0; border-radius: 6px; overflow: hidden; } .ds-action-btn { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border: none; background: #fff; color: #64748b; cursor: pointer; transition: background 0.15s, color 0.15s; } .ds-complete-btn:hover { background: #f0fdf4; color: #16a34a; } .ds-edit-btn:hover { background: #eef2ff; color: #4f46e5; } .ds-delete-btn:hover { background: #fef2f2; color: #dc2626; } .ds-task-meta { display: flex; align-items: center; gap: 5px; margin-top: 10px; } .ds-task-due { display: inline-flex; align-items: center; gap: 5px; font-size: 0.8125rem; color: #64748b; }"
+    },
+    {
+      "name": "Form Input",
+      "kind": "input",
+      "refersTo": "form-input",
+      "description": "Standard text input. 16px font prevents iOS zoom. Indigo focus ring at 12% opacity.",
+      "html": "<div class=\"ds-form-group\"><label class=\"ds-form-label\" for=\"ds-input\">Task title</label><input class=\"ds-form-input\" id=\"ds-input\" type=\"text\" placeholder=\"e.g. Submit lab report\"></div>",
+      "css": ".ds-form-group { display: flex; flex-direction: column; gap: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; } .ds-form-label { font-size: 0.8125rem; font-weight: 600; color: #0f172a; letter-spacing: 0.01em; } .ds-form-input { padding: 9px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; font-family: inherit; color: #0f172a; background: #fff; transition: border-color 0.15s, box-shadow 0.15s; outline: none; } .ds-form-input::placeholder { color: #94a3b8; } .ds-form-input:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.12); } .ds-form-input:hover:not(:focus) { border-color: #cbd5e1; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Dark slate-900 sticky nav with logo, page links, and user section. The visual anchor of the entire app.",
+      "html": "<nav class=\"ds-navbar\"><div class=\"ds-nav-inner\"><a href=\"#\" class=\"ds-logo\"><span class=\"ds-logo-mark\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\"><polyline points=\"4,17 9,11 13,14 19,7\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"4\" cy=\"17\" r=\"1.5\" fill=\"white\"/><circle cx=\"19\" cy=\"7\" r=\"1.5\" fill=\"white\"/></svg></span>UniTrack</a><ul class=\"ds-nav-links\"><li><a href=\"#\" class=\"ds-nav-link\">Dashboard</a></li><li><a href=\"#\" class=\"ds-nav-link\">Calendar</a></li><li><a href=\"#\" class=\"ds-nav-link ds-nav-link-active\">Quick Note</a></li></ul></div></nav>",
+      "css": ".ds-navbar { background: #0f172a; height: 56px; display: flex; align-items: center; box-shadow: 0 1px 0 rgba(255,255,255,0.06); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; } .ds-nav-inner { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; } .ds-logo { display: flex; align-items: center; gap: 10px; color: #f8fafc; font-size: 1rem; font-weight: 700; text-decoration: none; letter-spacing: -0.01em; } .ds-logo-mark { width: 24px; height: 24px; background: rgba(255,255,255,0.12); border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; } .ds-nav-links { display: flex; list-style: none; align-items: center; gap: 4px; margin: 0; padding: 0; } .ds-nav-link { display: flex; align-items: center; height: 36px; padding: 0 12px; color: #94a3b8; font-size: 0.875rem; font-weight: 500; text-decoration: none; border-radius: 6px; transition: color 0.15s, background 0.15s; white-space: nowrap; } .ds-nav-link:hover { color: #f8fafc; background: rgba(255,255,255,0.08); } .ds-nav-link-active { color: #f8fafc; background: rgba(255,255,255,0.08); }"
+    },
+    {
+      "name": "Page Title",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The single serif heading inside the app interior. DM Serif Display, 1.5rem, one per page.",
+      "html": "<h2 class=\"ds-page-title\"><svg class=\"ds-page-icon\" width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"2\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"12\" y=\"2\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"2\" y=\"12\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"12\" y=\"12\" width=\"6\" height=\"6\" rx=\"1\"/></svg>Dashboard</h2>",
+      "css": "@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap'); .ds-page-title { display: flex; align-items: center; gap: 8px; font-family: 'DM Serif Display', Georgia, serif; font-size: 1.5rem; font-weight: 400; letter-spacing: -0.02em; color: #0f172a; margin-bottom: 24px; } .ds-page-icon { color: #4f46e5; flex-shrink: 0; }"
+    },
+    {
+      "name": "Inbox Alert",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Pending inbox notification banner. Known debt: currently uses a 4px left-stripe border — should be replaced with a full tinted background border.",
+      "html": "<div class=\"ds-inbox-alert\" role=\"region\" aria-label=\"Inbox items pending\"><div class=\"ds-alert-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 18 18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 2L16.5 15H1.5L9 2z\"/><path d=\"M9 7v4\"/><circle cx=\"9\" cy=\"13\" r=\"0.75\" fill=\"currentColor\" stroke=\"none\"/></svg></div><div class=\"ds-alert-content\"><strong>3 items waiting in Inbox</strong><button class=\"ds-btn-primary ds-btn-small\">Process Now</button></div></div>",
+      "css": ".ds-inbox-alert { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: #fffbeb; border: 1px solid #fcd34d; border-left: 4px solid #d97706; border-radius: 8px; margin-bottom: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; } .ds-alert-icon { color: #d97706; flex-shrink: 0; display: flex; } .ds-alert-content { flex: 1; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; } .ds-alert-content strong { color: #78350f; font-size: 0.875rem; font-weight: 600; } .ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #4f46e5; color: #fff; border: 1px solid #4f46e5; border-radius: 8px; font-size: 0.875rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.15s; } .ds-btn-small { padding: 6px 12px; min-height: 32px; font-size: 0.8125rem; } .ds-btn-primary:hover { background: #4338ca; border-color: #4338ca; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Instrument",
+    "overview": "UniTrack's visual system is built around a single idea: a well-calibrated instrument disappears in use. The UI does not announce itself. It holds information without decoration, responds to interaction without drama, and rewards close attention with structural clarity. Slate stillness. Indigo precision. A dark navbar that anchors the chrome; a white body that holds the work.\n\nThe system rejects two aesthetics by name. First, the generic SaaS productivity aesthetic — pastel blobs, rounded gradients, \"streamline your workflow\" energy, Asana-style milestone celebrations. Second, the gamified app aesthetic — confetti, streaks, achievement badges, encouraging microcopy. UniTrack is a personal tool built by an engineer for an engineer. It does not try to motivate; it enables.\n\nThe landing page is exempt from the interior's restraint. There, the serif and indigo can move forward. In the app, they stay at the back.",
+    "keyCharacteristics": [
+      "Dark slate-900 navbar anchors the chrome; near-white body holds the work",
+      "Indigo as the single accent voice — used sparingly, always carrying meaning",
+      "DM Serif Display for page titles and hero headings; system-sans for all functional copy",
+      "Shadows imply lift without announcing it — ambient and barely perceptible at rest",
+      "Dense information with explicit breathing room between groups"
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "Clarity Indigo is the only non-semantic accent in the system. Do not introduce a second accent color. If a surface needs visual distinction, use a background tint or a border step — not a new hue.", "section": "colors" },
+      { "name": "The Warm-Neutral Prohibition", "body": "Page Mist (#F8FAFC) is cool-tinted. Never drift the background toward warm or sandy tones. Warmth in this system lives in the typography pairing, not in the surface color.", "section": "colors" },
+      { "name": "The Serif Ceiling Rule", "body": "DM Serif Display appears only at Title level and above. Never use it for body copy, labels, buttons, or metadata. Below the page title, the system is pure sans.", "section": "typography" },
+      { "name": "The One Uppercase Zone Rule", "body": "Uppercase tracked text is reserved for course section headers — structural dividers that group task cards. It must not appear as marketing eyebrows, card labels, or button text.", "section": "typography" },
+      { "name": "The Flat-At-Rest Rule", "body": "Surfaces at rest carry only Ambient shadow. Hover Lift exists to confirm interactivity — it should never appear on non-interactive elements. If something can't be clicked, it doesn't lift.", "section": "elevation" }
+    ],
+    "dos": [
+      "Use Clarity Indigo only when it carries meaning — focus, primary action, active state, today's date. Its rarity is what makes it legible.",
+      "Use DM Serif Display only for page-level titles and landing hero headings. One serif heading per screen.",
+      "Apply Ambient shadow as the default resting elevation for all cards and containers. Never zero-shadow a surface that sits on the page.",
+      "Differentiate surface depth through background color steps before adding borders or shadows.",
+      "Use text-wrap: balance on h1–h3 headings to prevent orphaned words.",
+      "Expand touch targets to ~44px on icon buttons via pseudo-element, while keeping the visual footprint at its intended size.",
+      "Provide a two-step confirmation before any destructive action. Never a window.confirm() dialog.",
+      "Keep uppercase tracked text confined to course-section dividers in the dashboard."
+    ],
+    "donts": [
+      "Don't introduce a second accent color. Clarity Indigo is the only non-semantic accent in the system.",
+      "Don't use gradient text (background-clip: text with a gradient fill). Prohibited regardless of context.",
+      "Don't replicate the generic SaaS productivity aesthetic: pastel blobs, rounded gradients, feature-highlight carousels, or Asana/Monday-style milestone celebrations.",
+      "Don't add gamification elements: streaks, achievement badges, confetti, progress celebrations.",
+      "Don't drift the page background toward warm or sandy tones. Page Mist (#F8FAFC) is cool-tinted.",
+      "Don't add uppercase tracked eyebrows above every section on the landing page.",
+      "Don't extend the left-stripe border pattern (border-left > 1px as a colored accent). The existing inbox-alert border-left: 4px is known debt.",
+      "Don't nest cards inside cards.",
+      "Don't apply Hover Lift shadow to non-interactive elements. Elevation implies clickability."
+    ]
+  }
+}
